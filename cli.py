@@ -71,7 +71,7 @@ def main():
         tm.list_tasks()
     elif args.command == "add":
         if args.index is not None:
-            tm.add_task(args.task, args.index)
+            tm.add_task(args.task, index=args.index)
         else:
             tm.add_task(args.task)
     elif args.command == "edit":
