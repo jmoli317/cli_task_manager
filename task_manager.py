@@ -17,10 +17,16 @@ class TaskManager:
         pass
 
     def save_tasks(self):
-        pass
+        with open(self.file_name, "w") as file:
+            json.dump(self.tasks, file)
 
-    def add_task(self):
-        pass
+    def add_task(self, task: str, index: int = None):
+        if index is None:
+            self.tasks.append(task)
+        else:
+            self.tasks.insert(index, task)
+        self.save_tasks()
+        return self.tasks
 
     def edit_task(self):
         pass
