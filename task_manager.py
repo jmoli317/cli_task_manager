@@ -4,13 +4,18 @@ from pathlib import Path
 
 class TaskManager:
     """
-    A class to manage CRUD operations for a task list.
+    Manage a JSON-backed list of tasks with convenience helpers.
+
+    :param file_name: JSON file path used to save tasks.
+    :type file_name: str
     """
+
     def __init__(self, file_name: str = "task_list.json"):
         """
-        Initialize the class and verify that the json file exists.
+        Initialize storage and load tasks.
 
-        :param file_name: JSON file name for task list storage.
+        :param file_name: JSON file path used to save tasks.
+        :type file_name: str
         """
 
         self.file_name = file_name
@@ -26,7 +31,7 @@ class TaskManager:
         """
         Print the task list to the command line interface.
 
-        :return: None
+        :returns: ``None``
         """
 
         index_header = "Index"
@@ -39,7 +44,6 @@ class TaskManager:
             len(task_header),
             max((len(t[0]) for t in self.tasks), default=0)
             )
-        status_width = len(status_header)
 
         print()  # blank line before the table
 
@@ -58,9 +62,9 @@ class TaskManager:
 
     def save_tasks(self):
         """
-        Save the task list to the json file.
+        Save the task list to disk.
 
-        :return: None
+        :returns: ``None``
         """
 
         with open(self.file_name, "w") as file:
@@ -73,28 +77,40 @@ class TaskManager:
         index: int = None
         ):
         """
-        Add a new task to the task list.
+        Append or insert a new task.
 
-        :param task: Description of the new task.
-        :param is_done: Completion status of the task.
-        :param index: Index to insert new task.
-        :return: List of tasks (including the new task).
+        :param task: Task description to store.
+        :type task: str
+        :param is_done: Task completion status.
+        :type is_done: bool
+        :param index: Position to insert the task (optional).
+        :type index: int | None
+        :returns: Updated list of tasks.
+        :rtype: list
+        :raises ValueError: If ``index`` is out of range.
         """
+
+        new_task = [task, is_done]
         if index is None:
-            self.tasks.append([task, is_done])
+            self.tasks.append(new_task)
         else:
-            self.tasks.insert(index, [task, is_done])
+            self.tasks.insert(index, new_task)
         self.save_tasks()
         return self.tasks
 
     def edit_task(self, index: int, new_task: str):
         """
-        Edit a task from the task list.
+        Replace a task description at ``index``.
 
-        :param index: Index of an existing task.
-        :param new_task: Updated description of the task.
-        :return: List of tasks (with the updated task).
+        :param index: Position of the task to edit.
+        :type index: int
+        :param new_task: Replacement task description.
+        :type new_task: str
+        :returns: Updated list of tasks after the edit.
+        :rtype: list
+        :raises ValueError: If ``index`` is out of range.
         """
+
         if index < 0 or index >= len(self.tasks):
             raise ValueError("Task index out of range")
         self.tasks[index] = [new_task, self.tasks[index][1]]
@@ -103,11 +119,15 @@ class TaskManager:
 
     def update_task_status(self, index: int):
         """
-        Update the status of an existing task.
+        Change the completion status for a task at ``index``.
 
-        :param index: Index of an existing task.
-        :return: List of tasks (with the updated task).
+        :param index: Position of the task to update the status.
+        :type index: int
+        :returns: Updated list of tasks after the status change.
+        :rtype: list
+        :raises ValueError: If ``index`` is out of range.
         """
+
         if index < 0 or index >= len(self.tasks):
             raise ValueError("Task index out of range")
         if not self.tasks[index][1]:
@@ -119,10 +139,13 @@ class TaskManager:
 
     def delete_task(self, index: int):
         """
-        Delete a task from the task list.
+        Remove the task at ``index`` from the list.
 
-        :param index: Index of an existing task.
-        :return: List of tasks (without the deleted task).
+        :param index: Position of the task to delete.
+        :type index: int
+        :returns: Updated list of tasks after removal.
+        :rtype: list
+        :raises ValueError: If ``index`` is out of range.
         """
 
         if index < 0 or index >= len(self.tasks):

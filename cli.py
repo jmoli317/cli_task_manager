@@ -3,11 +3,17 @@ from task_manager import TaskManager
 
 
 def cmd_parser():
+    """
+    Build the argument parser with task subcommands.
+
+    :returns: Configured parser ready to parse CLI input.
+    :rtype: argparse.ArgumentParser
+    """
 
     parser = argparse.ArgumentParser(description="Task Manager CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    list_cmd = subparsers.add_parser("list")
+    subparsers.add_parser("list")
 
     add_cmd = subparsers.add_parser("add")
     add_cmd.add_argument(
@@ -51,6 +57,12 @@ def cmd_parser():
 
 
 def main():
+    """
+    Parse CLI arguments and route to TaskManager actions.
+
+    :returns: ``None``
+    """
+
     tm = TaskManager()
     command_parser = cmd_parser()
 
