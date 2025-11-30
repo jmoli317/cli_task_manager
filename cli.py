@@ -57,16 +57,16 @@ def main():
     args = command_parser.parse_args()
     if args.command == "list":
         tm.list_tasks()
-    if args.command == "add":
+    elif args.command == "add":
         if args.index is not None:
             tm.add_task(args.task, args.index)
         else:
             tm.add_task(args.task)
-    if args.command == "edit":
+    elif args.command == "edit":
         tm.edit_task(args.index, args.text)
-    if args.command == "status":
+    elif args.command == "status":
         tm.update_task_status(args.index)
-    if args.command == "delete":
+    elif args.command == "delete":
         tm.delete_task(args.index)
 
 

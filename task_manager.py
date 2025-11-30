@@ -19,7 +19,8 @@ class TaskManager:
             with open(file_name, "w") as file:
                 json.dump([], file)
 
-        self.tasks = json.load(open(self.file_name))
+        with open(file_name, "r") as file:
+            self.tasks = json.load(open(self.file_name))
 
     def list_tasks(self):
         """
@@ -82,7 +83,7 @@ class TaskManager:
         if index is None:
             self.tasks.append([task, is_done])
         else:
-            self.tasks.insert(index, task)
+            self.tasks.insert(index, [task, is_done])
         self.save_tasks()
         return self.tasks
 
