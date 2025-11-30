@@ -35,5 +35,8 @@ class TaskManager:
         self.save_tasks()
         return self.tasks
 
-    def delete_task(self):
-        pass
+    def delete_task(self, task_index: int):
+        if task_index < 0 or task_index >= len(self.tasks):
+            raise ValueError("Task index out of range")
+        del self.tasks[task_index]
+        self.save_tasks()
