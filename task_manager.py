@@ -28,8 +28,12 @@ class TaskManager:
         self.save_tasks()
         return self.tasks
 
-    def edit_task(self):
-        pass
+    def edit_task(self, task_index: int, new_task: str):
+        if task_index < 0 or task_index >= len(self.tasks):
+            raise ValueError("Task index out of range")
+        self.tasks[task_index] = new_task
+        self.save_tasks()
+        return self.tasks
 
     def delete_task(self):
         pass
