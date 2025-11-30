@@ -43,7 +43,7 @@ def cmd_parser():
     return parser
 
 
-if __name__ == "__main__":
+def main():
     tm = TaskManager()
     command_parser = cmd_parser()
     args = command_parser.parse_args()
@@ -58,3 +58,7 @@ if __name__ == "__main__":
         tm.edit_task(args.index, args.new_text)
     if args.command == "delete":
         tm.delete_task(args.index)
+
+
+if __name__ == "__main__":
+    main()

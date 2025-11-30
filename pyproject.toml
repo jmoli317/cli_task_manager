@@ -1,0 +1,6 @@
+[project]
+name = "cli_task_manager"
+version = "0.1.0"
+
+[project.scripts]
+task = "cli:main"
