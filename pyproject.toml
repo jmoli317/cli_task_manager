@@ -4,3 +4,6 @@ version = "0.1.0"
 
 [project.scripts]
 task = "cli:main"
+
+[tool.setuptools]
+py-modules = ["cli", "task_manager"]
