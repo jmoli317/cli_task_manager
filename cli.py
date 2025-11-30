@@ -23,7 +23,7 @@ def cmd_parser():
     edit_cmd.add_argument(
         "index",
         type=int,
-        description="Index of the task to edit."
+        help="Index of the task to edit."
         )
     edit_cmd.add_argument(
         "new_text",
@@ -39,3 +39,18 @@ def cmd_parser():
         )
 
     return parser
+
+
+if __name__ == "__main__":
+    tm = TaskManager()
+    command_parser = cmd_parser()
+    args = command_parser.parse_args()
+    if args.command == "add":
+        if args.index is not None:
+            tm.add_task(args.task, args.index)
+        else:
+            tm.add_task(args.task)
+    if args.command == "edit":
+        tm.edit_task(args.index, args.new_text)
+    if args.command == "delete":
+        tm.delete_task(args.index)
