@@ -14,7 +14,17 @@ class TaskManager:
         self.tasks = json.load(open(self.file_name))
 
     def list_tasks(self):
-        pass
+
+        index_header = "Index"
+        max_index = len(self.tasks)
+
+        width = max(len(index_header), len(str(max_index)))
+
+        print(f"{index_header:>{width}}  Task")
+        print("-" * (width + 2 + len("Task")))
+
+        for i, task in enumerate(self.tasks):
+            print(f"{i:>{width}}  {task}")
 
     def save_tasks(self):
         with open(self.file_name, "w") as file:
