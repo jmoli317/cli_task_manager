@@ -33,11 +33,12 @@ class TaskManager:
 
         width = max(len(index_header), len(str(max_index)))
 
-        print(f"{index_header:>{width}}  Task")
+        print(f"\n{index_header:>{width}}  Task")
         print("-" * (width + 2 + len("Task")))
 
         for i, task in enumerate(self.tasks):
             print(f"{i:>{width}}  {task}")
+        print()
 
     def save_tasks(self):
         """

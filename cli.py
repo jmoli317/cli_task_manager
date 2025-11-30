@@ -7,6 +7,8 @@ def cmd_parser():
     parser = argparse.ArgumentParser(description="Task Manager CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
+    list_cmd = subparsers.add_parser("list")
+
     add_cmd = subparsers.add_parser("add")
     add_cmd.add_argument(
         "task",
@@ -45,6 +47,8 @@ if __name__ == "__main__":
     tm = TaskManager()
     command_parser = cmd_parser()
     args = command_parser.parse_args()
+    if args.command == "list":
+        tm.list_tasks()
     if args.command == "add":
         if args.index is not None:
             tm.add_task(args.task, args.index)
