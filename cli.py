@@ -28,9 +28,16 @@ def cmd_parser():
         help="Index of the task to edit."
         )
     edit_cmd.add_argument(
-        "new_text",
+        "text",
         type=str,
         help="New task description."
+        )
+
+    status_cmd = subparsers.add_parser("status")
+    status_cmd.add_argument(
+        "index",
+        type=int,
+        help="Index of the task to update."
         )
 
     delete_cmd = subparsers.add_parser("delete")
@@ -46,6 +53,7 @@ def cmd_parser():
 def main():
     tm = TaskManager()
     command_parser = cmd_parser()
+
     args = command_parser.parse_args()
     if args.command == "list":
         tm.list_tasks()
@@ -55,7 +63,9 @@ def main():
         else:
             tm.add_task(args.task)
     if args.command == "edit":
-        tm.edit_task(args.index, args.new_text)
+        tm.edit_task(args.index, args.text)
+    if args.command == "status":
+        tm.update_task_status(args.index)
     if args.command == "delete":
         tm.delete_task(args.index)
 

@@ -29,16 +29,31 @@ class TaskManager:
         """
 
         index_header = "Index"
-        max_index = len(self.tasks)
+        task_header = "Task"
+        status_header = "Status"
 
-        width = max(len(index_header), len(str(max_index)))
+        max_index = len(self.tasks) - 1 if self.tasks else 0
+        index_width = max(len(index_header), len(str(max_index)))
+        task_width = max(
+            len(task_header),
+            max((len(t[0]) for t in self.tasks), default=0)
+            )
+        status_width = len(status_header)
 
-        print(f"\n{index_header:>{width}}  Task")
-        print("-" * (width + 2 + len("Task")))
+        print()  # blank line before the table
+
+        print(
+            f"{index_header:>{index_width}}  {task_header:<{task_width}}  {status_header}"
+            )
+
+        separator_len = index_width + 2 + task_width + 2 + len(status_header)
+        print("-" * separator_len)
 
         for i, task in enumerate(self.tasks):
-            print(f"{i:>{width}}  {task}")
-        print()
+            title = task[0]
+            status = "DONE" if task[1] else "IN PROGRESS"
+            print(f"{i:>{index_width}}  {title:<{task_width}}  {status}")
+        print()  # blank line after table
 
     def save_tasks(self):
         """
@@ -50,16 +65,22 @@ class TaskManager:
         with open(self.file_name, "w") as file:
             json.dump(self.tasks, file)
 
-    def add_task(self, task: str, index: int = None):
+    def add_task(
+        self,
+        task: str,
+        is_done: bool = False,
+        index: int = None
+        ):
         """
         Add a new task to the task list.
 
         :param task: Description of the new task.
+        :param is_done: Completion status of the task.
         :param index: Index to insert new task.
         :return: List of tasks (including the new task).
         """
         if index is None:
-            self.tasks.append(task)
+            self.tasks.append([task, is_done])
         else:
             self.tasks.insert(index, task)
         self.save_tasks()
@@ -75,18 +96,35 @@ class TaskManager:
         """
         if index < 0 or index >= len(self.tasks):
             raise ValueError("Task index out of range")
-        self.tasks[index] = new_task
+        self.tasks[index] = [new_task, self.tasks[index][1]]
         self.save_tasks()
         return self.tasks
 
-    def delete_task(self, task_index: int):
+    def update_task_status(self, index: int):
+        """
+        Update the status of an existing task.
+
+        :param index: Index of an existing task.
+        :return: List of tasks (with the updated task).
+        """
+        if index < 0 or index >= len(self.tasks):
+            raise ValueError("Task index out of range")
+        if not self.tasks[index][1]:
+            self.tasks[index][1] = True
+        else:
+            self.tasks[index][1] = False
+        self.save_tasks()
+        return self.tasks
+
+    def delete_task(self, index: int):
         """
         Delete a task from the task list.
 
-        :param task_index: Index of an existing task.
+        :param index: Index of an existing task.
         :return: List of tasks (without the deleted task).
         """
-        if task_index < 0 or task_index >= len(self.tasks):
+
+        if index < 0 or index >= len(self.tasks):
             raise ValueError("Task index out of range")
-        del self.tasks[task_index]
+        del self.tasks[index]
         self.save_tasks()
