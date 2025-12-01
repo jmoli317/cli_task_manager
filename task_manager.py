@@ -24,7 +24,7 @@ class TaskManager:
                 json.dump([], fp)
 
         with open(file_path, "r") as fp:
-            self.tasks = json.load(fp)
+            self.tasks = [tuple(task) for task in json.load(fp)]
 
     def list_tasks(self) -> None:
         """
@@ -96,7 +96,7 @@ class TaskManager:
             self.tasks.append(new_task)
         else:
             if index < 0 or index >= len(self.tasks):
-                raise ValueError("Index out of range")
+                raise ValueError("Task index out of range")
             self.tasks.insert(index, new_task)
         self.save_tasks()
         return self.tasks
