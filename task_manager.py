@@ -4,18 +4,18 @@ from pathlib import Path
 
 class TaskManager:
     """
-    Manage a JSON-backed list of tasks with convenience helpers.
+    Manage tasks stored in a JSON-backed file.
 
-    :param file_path: JSON file path used to save tasks.
-    :type file_path: Path
+    Load tasks from a JSON file at initialization and provide methods
+    to list, add, edit, update status, and delete tasks.
     """
 
     def __init__(self, file_path: Path = Path("tasks.json")) -> None:
         """
-        Initialize storage and load tasks.
+        Initialize the task manager and load tasks from disk.
 
-        :param file_path: JSON file path used to save tasks.
-        :type file_path: Path
+        Create the JSON file if it does not exist and define the tasks
+        attribute from the data in the file.
         """
 
         self.file_path = file_path
@@ -28,9 +28,18 @@ class TaskManager:
 
     def list_tasks(self) -> None:
         """
-        Print the task list to the command line interface.
+        Print the task table to the command-line interface.
 
-        :returns: ``None``
+        Show indices, descriptions, and status values in aligned columns
+        with headers and a separator line.
+
+        Example:
+
+        Index  Task             Status
+        -------------------------------
+        0      write tests      IN PROGRESS
+        1      update README    DONE
+
         """
 
         index_header = "Index"
@@ -44,7 +53,7 @@ class TaskManager:
             max((len(t[0]) for t in self.tasks), default=0)
             )
 
-        print()  # blank line before the table
+        print()
 
         print(
             f"{index_header:>{index_width}}  {task_header:<{task_width}}  {status_header}"
@@ -59,13 +68,15 @@ class TaskManager:
                 f"{index:>{index_width}}  {description:<{task_width}} "
                 f" {status}"
                 )
-        print()  # blank line after table
+        print()
 
     def save_tasks(self) -> None:
         """
-        Save the task list to disk.
+        Save the current task list to disk.
 
-        :returns: ``None``
+        Write the tasks list to the JSON file specified by the
+        file_path attribute. This method is invoked internally by add_task,
+        edit_task, update_task_status, and delete_task.
         """
 
         with open(self.file_path, "w") as fp:
@@ -78,18 +89,19 @@ class TaskManager:
         index: int | None = None
         ) -> list[tuple[str, bool]]:
         """
-        Append or insert a new task.
+        Add a new task to the list.
 
-        :param description: Task description to store.
-        :type description: str
-        :param is_done: Task completion status.
-        :type is_done: bool
-        :param index: Index to insert the task (optional).
-        :type index: int | None
-        :returns: Updated list of tasks.
-        :rtype: list
-        :raises ValueError: If ``index`` is out of range.
+        Append the task when no index is given or insert it at the
+        provided zero-based index. Raise a ValueError when the index is
+        outside the valid range and return the updated list of tasks.
+
+        Example:
+        >>> TaskManager().tasks
+        [("test the code", False)]
+        >>> TaskManager().add_task("write docs")
+        [("test the code", False), ("write docs", False)]
         """
+
 
         new_task = (description, is_done)
         if index is None:
@@ -107,16 +119,19 @@ class TaskManager:
         new_description: str
         ) -> list[tuple[str, bool]]:
         """
-        Replace a task description at ``index``.
+        Edit the description of a task at the given index.
 
-        :param index: Index of the task to edit.
-        :type index: int
-        :param new_description: Replacement task description.
-        :type new_description: str
-        :returns: Updated list of tasks after the edit.
-        :rtype: list
-        :raises ValueError: If ``index`` is out of range.
+        Replace the existing description while preserving the completion
+        status. Raise a ValueError when the index is outside the valid
+        range and return the updated list of tasks.
+
+        Example:
+        >>> TaskManager().tasks
+        [("test the code", False)]
+        >>> TaskManager().edit_task(0, "test the program")
+        [("test the program", False)]
         """
+
 
         if index < 0 or index >= len(self.tasks):
             raise ValueError("Task index out of range")
@@ -128,13 +143,17 @@ class TaskManager:
 
     def update_task_status(self, index: int) -> list[tuple[str, bool]]:
         """
-        Change the completion status for a task at ``index``.
+        Toggle the completion status of a task at the given index.
 
-        :param index: Index of the task to update the status.
-        :type index: int
-        :returns: Updated list of tasks after the status change.
-        :rtype: list
-        :raises ValueError: If ``index`` is out of range.
+        Switch the task between done and in-progress states. Raise a
+        ValueError when the index is outside the valid range and return
+        the updated list of tasks.
+
+        Example:
+        >>> TaskManager().tasks
+        [("test the code", False)]
+        >>> TaskManager().update_task_status(0)
+        [("test the code", True)]
         """
 
         if index < 0 or index >= len(self.tasks):
@@ -147,13 +166,16 @@ class TaskManager:
 
     def delete_task(self, index: int) -> list[tuple[str, bool]]:
         """
-        Remove the task at ``index`` from the list.
+        Delete the task at the given index.
 
-        :param index: Index of the task to delete.
-        :type index: int
-        :returns: Updated list of tasks after removal.
-        :rtype: list
-        :raises ValueError: If ``index`` is out of range.
+        Remove the task from the list. Raise a ValueError when the index
+        is outside the valid range and return the updated list of tasks.
+
+        Example:
+        >>> TaskManager().tasks
+        [("test the code", False), ("write docs", True)]
+        >>> TaskManager().delete_task(0)
+        [("write docs", True)]
         """
 
         if index < 0 or index >= len(self.tasks):

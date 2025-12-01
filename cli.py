@@ -2,12 +2,12 @@ import argparse
 from task_manager import TaskManager
 
 
-def cmd_parser():
+def cmd_parser() -> argparse.ArgumentParser:
     """
-    Build the argument parser with task subcommands.
+    Build and return the argument parser for task commands.
 
-    :returns: Configured parser ready to parse CLI input.
-    :rtype: argparse.ArgumentParser
+    Define the command-line arguments with subcommands for listing,
+    adding, editing, updating status, and deleting tasks.
     """
 
     parser = argparse.ArgumentParser(
@@ -89,11 +89,12 @@ def cmd_parser():
     return parser
 
 
-def main():
+def main() -> None:
     """
-    Parse CLI arguments and route to TaskManager actions.
+    Parse command-line arguments and execute task operations.
 
-    :returns: ``None``
+    Create a task manager instance, interpret the selected subcommand,
+    and call the corresponding TaskManager method.
     """
 
     tm = TaskManager()
