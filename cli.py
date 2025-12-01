@@ -2,12 +2,9 @@ import argparse
 from task_manager import TaskManager
 
 
-def cmd_parser():
+def cmd_parser() -> argparse.ArgumentParser:
     """
     Build the argument parser with task subcommands.
-
-    :returns: Configured parser ready to parse CLI input.
-    :rtype: argparse.ArgumentParser
     """
 
     parser = argparse.ArgumentParser(
@@ -89,11 +86,9 @@ def cmd_parser():
     return parser
 
 
-def main():
+def main() -> None:
     """
     Parse CLI arguments and route to TaskManager actions.
-
-    :returns: ``None``
     """
 
     tm = TaskManager()

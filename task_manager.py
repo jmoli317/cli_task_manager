@@ -4,18 +4,12 @@ from pathlib import Path
 
 class TaskManager:
     """
-    Manage a JSON-backed list of tasks with convenience helpers.
-
-    :param file_path: JSON file path used to save tasks.
-    :type file_path: Path
+    Manage tasks stored in a JSON file.
     """
 
     def __init__(self, file_path: Path = Path("tasks.json")) -> None:
         """
-        Initialize storage and load tasks.
-
-        :param file_path: JSON file path used to save tasks.
-        :type file_path: Path
+        Initialize storage and load tasks from disk.
         """
 
         self.file_path = file_path
@@ -29,8 +23,6 @@ class TaskManager:
     def list_tasks(self) -> None:
         """
         Print the task list to the command line interface.
-
-        :returns: ``None``
         """
 
         index_header = "Index"
@@ -64,8 +56,6 @@ class TaskManager:
     def save_tasks(self) -> None:
         """
         Save the task list to disk.
-
-        :returns: ``None``
         """
 
         with open(self.file_path, "w") as fp:
@@ -80,15 +70,7 @@ class TaskManager:
         """
         Append or insert a new task.
 
-        :param description: Task description to store.
-        :type description: str
-        :param is_done: Task completion status.
-        :type is_done: bool
-        :param index: Index to insert the task (optional).
-        :type index: int | None
-        :returns: Updated list of tasks.
-        :rtype: list
-        :raises ValueError: If ``index`` is out of range.
+        Raise a ValueError if the insertion index is invalid.
         """
 
         new_task = (description, is_done)
@@ -107,15 +89,9 @@ class TaskManager:
         new_description: str
         ) -> list[tuple[str, bool]]:
         """
-        Replace a task description at ``index``.
+        Replace a task description at the given index.
 
-        :param index: Index of the task to edit.
-        :type index: int
-        :param new_description: Replacement task description.
-        :type new_description: str
-        :returns: Updated list of tasks after the edit.
-        :rtype: list
-        :raises ValueError: If ``index`` is out of range.
+        Raise a ValueError if the index is invalid.
         """
 
         if index < 0 or index >= len(self.tasks):
@@ -128,13 +104,9 @@ class TaskManager:
 
     def update_task_status(self, index: int) -> list[tuple[str, bool]]:
         """
-        Change the completion status for a task at ``index``.
+        Toggle the completion status for the task at the index.
 
-        :param index: Index of the task to update the status.
-        :type index: int
-        :returns: Updated list of tasks after the status change.
-        :rtype: list
-        :raises ValueError: If ``index`` is out of range.
+        Raise a ValueError if the index is invalid.
         """
 
         if index < 0 or index >= len(self.tasks):
@@ -147,13 +119,9 @@ class TaskManager:
 
     def delete_task(self, index: int) -> list[tuple[str, bool]]:
         """
-        Remove the task at ``index`` from the list.
+        Remove the task at the given index from the list.
 
-        :param index: Index of the task to delete.
-        :type index: int
-        :returns: Updated list of tasks after removal.
-        :rtype: list
-        :raises ValueError: If ``index`` is out of range.
+        Raise a ValueError if the index is invalid.
         """
 
         if index < 0 or index >= len(self.tasks):
