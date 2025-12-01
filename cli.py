@@ -10,47 +10,80 @@ def cmd_parser():
     :rtype: argparse.ArgumentParser
     """
 
-    parser = argparse.ArgumentParser(description="Task Manager CLI")
-    subparsers = parser.add_subparsers(dest="command", required=True)
+    parser = argparse.ArgumentParser(
+        description=(
+            "Manage tasks stored in a JSON file with commands to list, add, "
+            "edit, toggle status, and delete entries."
+        )
+        )
+    subparsers = parser.add_subparsers(
+        dest="command",
+        required=True,
+        help="Available task commands"
+        )
 
-    subparsers.add_parser("list")
+    subparsers.add_parser(
+        "list",
+        help="Display all tasks with their indices and completion status.",
+        description="Show the current task table."
+        )
 
-    add_cmd = subparsers.add_parser("add")
+    add_cmd = subparsers.add_parser(
+        "add",
+        help="Create a new task and append it to the list.",
+        description="Add a task description to the task list."
+        )
     add_cmd.add_argument(
         "task",
         type=str,
-        help="Description of the task",
+        help="Description text to store for the new task.",
         )
     add_cmd.add_argument(
         "--index",
         type=int,
-        help="Index where to insert the task.",
+        help=(
+            "Insert the task at a zero-based index instead of appending to "
+            "the end."
+            ),
         )
 
-    edit_cmd = subparsers.add_parser("edit")
+    edit_cmd = subparsers.add_parser(
+        "edit",
+        help="Replace the description text for an existing task.",
+        description="Update the description for the task at the given index."
+        )
+
     edit_cmd.add_argument(
         "index",
         type=int,
-        help="Index of the task to edit."
+        help="Zero-based index of the task to edit."
         )
     edit_cmd.add_argument(
         "text",
         type=str,
-        help="New task description."
+        help="Replacement description text for the task."
         )
 
-    status_cmd = subparsers.add_parser("status")
+    status_cmd = subparsers.add_parser(
+        "status",
+        help="Toggle the completion status of a task.",
+        description="Switch a task between IN PROGRESS and DONE."
+        )
     status_cmd.add_argument(
         "index",
         type=int,
         help="Index of the task to update."
         )
 
-    delete_cmd = subparsers.add_parser("delete")
+    delete_cmd = subparsers.add_parser(
+        "delete",
+        help="Remove a task from the list.",
+        description="Delete the task located at the provided index."
+        )
     delete_cmd.add_argument(
         "index",
         type=int,
-        help="Index of the task to delete."
+        help="Zero-based index of the task to delete from the list."
         )
 
     return parser
