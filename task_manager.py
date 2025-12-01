@@ -6,26 +6,26 @@ class TaskManager:
     """
     Manage a JSON-backed list of tasks with convenience helpers.
 
-    :param file_name: JSON file path used to save tasks.
-    :type file_name: str
+    :param file_path: JSON file path used to save tasks.
+    :type file_path: str
     """
 
-    def __init__(self, file_name: str = "task_list.json"):
+    def __init__(self, file_path: Path = Path("task_list.json")):
         """
         Initialize storage and load tasks.
 
-        :param file_name: JSON file path used to save tasks.
-        :type file_name: str
+        :param file_path: JSON file path used to save tasks.
+        :type file_path: str
         """
 
-        self.file_name = file_name
+        self.file_name = file_path
 
-        if not Path(self.file_name).exists():
-            with open(file_name, "w") as file:
-                json.dump([], file)
+        if not file_path.exists():
+            with open(file_path, "w") as fp:
+                json.dump([], fp)
 
-        with open(file_name, "r") as file:
-            self.tasks = json.load(file)
+        with open(file_path, "r") as fp:
+            self.tasks = json.load(fp)
 
     def list_tasks(self):
         """
